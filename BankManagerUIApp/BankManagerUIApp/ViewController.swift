@@ -15,6 +15,7 @@ class ViewController: UIViewController {
         addButton()
         addTimeLabel()
         addQueueLabel()
+        addScrollView()
     }
     
     private func setupMainStackView() {
@@ -78,7 +79,7 @@ class ViewController: UIViewController {
         let businessQueue: UILabel = .init()
         businessQueue.text = "업무중"
         businessQueue.textAlignment = .center
-        businessQueue.backgroundColor = .systemBlue
+        businessQueue.backgroundColor = .systemIndigo
         businessQueue.textColor = .white
         businessQueue.font = .systemFont(ofSize: 32)
         
@@ -89,6 +90,24 @@ class ViewController: UIViewController {
         mainStackView.addArrangedSubview(queueStackView)
         queueStackView.addArrangedSubview(waitingQueue)
         queueStackView.addArrangedSubview(businessQueue)
+    }
+    
+    private func addScrollView() {
+        let waitingScrollView: UIScrollView = .init()
+        waitingScrollView.translatesAutoresizingMaskIntoConstraints = false
+        waitingScrollView.backgroundColor = .blue
+        
+        let businessScrollView: UIScrollView = .init()
+        businessScrollView.translatesAutoresizingMaskIntoConstraints = false
+        businessScrollView.backgroundColor = .red
+        
+        let scrollStackView: UIStackView = .init()
+        scrollStackView.axis = .horizontal
+        scrollStackView.distribution = .fillEqually
+        
+        mainStackView.addArrangedSubview(scrollStackView)
+        scrollStackView.addArrangedSubview(waitingScrollView)
+        scrollStackView.addArrangedSubview(businessScrollView)
     }
 }
 
