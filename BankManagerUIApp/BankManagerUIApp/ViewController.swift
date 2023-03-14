@@ -10,6 +10,7 @@ class ViewController: UIViewController {
     private let mainStackView: UIStackView = .init()
     private let waitingClientStackView: ClientStackView = .init()
     private let processingClientStackView: ClientStackView = .init()
+    private let totalTime: UILabel = .init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +49,7 @@ class ViewController: UIViewController {
         let resetButton: UIButton = .init()
         resetButton.setTitle("초기화", for: .normal)
         resetButton.setTitleColor(.systemRed, for: .normal)
+        resetButton.addTarget(self, action: #selector(resetClientAndTime), for: .touchUpInside)
         
         let buttonStackView: UIStackView = .init()
         buttonStackView.axis = .horizontal
@@ -64,15 +66,27 @@ class ViewController: UIViewController {
     
     private func addTimeLabel() {
         let businessTime: UILabel = .init()
-        
-        businessTime.text = "업무 시간 - 04:33:253"
-        businessTime.textAlignment = .center
+        businessTime.text = "업무 시간 - "
+        businessTime.textAlignment = .right
         businessTime.font = .systemFont(ofSize: 24)
-
-        mainStackView.addArrangedSubview(businessTime)
         
-        businessTime.translatesAutoresizingMaskIntoConstraints = false
-        businessTime.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        totalTime.text = "01:01:001"
+        totalTime.textAlignment = .left
+        totalTime.font = .systemFont(ofSize: 24)
+        
+        let timeStackView: UIStackView = .init()
+        timeStackView.axis = .horizontal
+        timeStackView.distribution = .fillEqually
+        timeStackView.spacing = 8
+        
+        timeStackView.addArrangedSubview(businessTime)
+        timeStackView.addArrangedSubview(totalTime)
+        
+        
+        mainStackView.addArrangedSubview(timeStackView)
+        
+//        businessTime.translatesAutoresizingMaskIntoConstraints = false
+//        businessTime.heightAnchor.constraint(equalToConstant: 24).isActive = true
     }
     
     private func addQueueLabel() {
@@ -124,6 +138,12 @@ class ViewController: UIViewController {
     
     @objc func addClient() {
         waitingClientStackView.addClient()
+    }
+    
+    @objc func resetClientAndTime() {
+        waitingClientStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        processingClientStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        totalTime.text = "00:00:000"
     }
 }
 
