@@ -68,7 +68,7 @@
 		C7694E58259C3EA20053667F /* BankManagerUIAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BankManagerUIAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7694E5C259C3EA20053667F /* BankManagerUIAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankManagerUIAppUITests.swift; sourceTree = "<group>"; };
 		C7694E5E259C3EA20053667F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C7D65D1D259C81BD005510E0 /* BankManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BankManager.swift; path = ../../BankManager.swift; sourceTree = "<group>"; };
+		C7D65D1D259C81BD005510E0 /* BankManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +96,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA84395029C06E190031BDD6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AA84394729C038FA0031BDD6 /* Bank.swift */,
+				AA84394029C038FA0031BDD6 /* BankClient.swift */,
+				AA84394229C038FA0031BDD6 /* Banker.swift */,
+				AA84394629C038FA0031BDD6 /* BusinessType.swift */,
+				AA84394529C038FA0031BDD6 /* LinkedList.swift */,
+				AA84394129C038FA0031BDD6 /* Node.swift */,
+				AA84394329C038FA0031BDD6 /* Queue.swift */,
+				C7D65D1D259C81BD005510E0 /* BankManager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA84395129C06E240031BDD6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				98441C4629C04E0D00CBF10C /* ClientStackView.swift */,
+				C7694E40259C3E9F0053667F /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA84395229C06E290031BDD6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		AA84395329C06EBF0031BDD6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C7694E45259C3EA20053667F /* LaunchScreen.storyboard */,
+				C7694E43259C3EA20053667F /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		AA84395429C06ED20031BDD6 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				C7694E3A259C3E9F0053667F /* AppDelegate.swift */,
+				C7694E3C259C3E9F0053667F /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
 		C7694E2E259C3E9F0053667F = {
 			isa = PBXGroup;
 			children = (
@@ -119,23 +168,14 @@
 		C7694E39259C3E9F0053667F /* BankManagerUIApp */ = {
 			isa = PBXGroup;
 			children = (
-				C7D65D1D259C81BD005510E0 /* BankManager.swift */,
-				C7694E3A259C3E9F0053667F /* AppDelegate.swift */,
-				C7694E3C259C3E9F0053667F /* SceneDelegate.swift */,
-				C7694E3E259C3E9F0053667F /* ViewController.swift */,
-				C7694E40259C3E9F0053667F /* Main.storyboard */,
-				C7694E43259C3EA20053667F /* Assets.xcassets */,
-				C7694E45259C3EA20053667F /* LaunchScreen.storyboard */,
+				AA84395029C06E190031BDD6 /* Model */,
+				AA84395129C06E240031BDD6 /* View */,
+				AA84395229C06E290031BDD6 /* Controller */,
+				AA84395329C06EBF0031BDD6 /* Resources */,
+				AA84395429C06ED20031BDD6 /* Application */,
 				C7694E48259C3EA20053667F /* Info.plist */,
-				AA84394729C038FA0031BDD6 /* Bank.swift */,
-				AA84394029C038FA0031BDD6 /* BankClient.swift */,
-				AA84394229C038FA0031BDD6 /* Banker.swift */,
-				AA84394629C038FA0031BDD6 /* BusinessType.swift */,
-				AA84394529C038FA0031BDD6 /* LinkedList.swift */,
-				AA84394129C038FA0031BDD6 /* Node.swift */,
-				AA84394329C038FA0031BDD6 /* Queue.swift */,
+				C7694E3E259C3E9F0053667F /* ViewController.swift */,
 				AA84394429C038FA0031BDD6 /* ViewController.swift */,
-				98441C4629C04E0D00CBF10C /* ClientStackView.swift */,
 			);
 			path = BankManagerUIApp;
 			sourceTree = "<group>";
