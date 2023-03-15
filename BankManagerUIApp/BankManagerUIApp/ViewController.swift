@@ -20,18 +20,19 @@ class ViewController: UIViewController {
         addTimeLabel()
         addQueueLabel()
         addScrollView()
-        
+        addNotificationObserver()
         // testing..
 //        waitingClientStackView.addClient()
 //        processingClientStackView.addClient()
     }
     
     private func addNotificationObserver() {
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(addClient),
-//            name: Notification.Name("startBankBusiness"),
-//            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(startProcess(notification:)),
+            name: Notification.Name("1"),
+            object: nil
+        )
         
         /* 발신지 코드
         NotificationCenter.default.post(
@@ -146,6 +147,11 @@ class ViewController: UIViewController {
         
         waitingClientStackView.setAutoLayout()
         processingClientStackView.setAutoLayout()
+    }
+    
+    @objc func startProcess(notification: Notification) {
+        guard let client = notification.object as? BankClient else { return }
+        waitingClientStackView.remove(client: client)
     }
     
     @objc func touchUpAddClientButton() {

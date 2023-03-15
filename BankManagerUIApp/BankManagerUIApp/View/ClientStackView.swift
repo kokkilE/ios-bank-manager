@@ -34,24 +34,10 @@ final class ClientStackView: UIStackView {
         ])
     }
     
-    func addClient() {
-        for index in 1...40 {
-            let label: UILabel = .init()
-            label.text = "\(index)-예금"
-            label.textAlignment = .center
-            label.font = .systemFont(ofSize: 24)
-            
-            if index % 2 == 0 {
-                label.textColor = .systemPurple
-            }
-            
-            self.addArrangedSubview(label)
-        }
-    }
-    
     func add(client: BankClient) {
         let label: UILabel = .init()
         label.text = "\(client.waitingNumber)-\(client.businessType.rawValue)"
+        label.tag = client.waitingNumber
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 24)
         
@@ -63,5 +49,14 @@ final class ClientStackView: UIStackView {
         }
         
         self.addArrangedSubview(label)
+    }
+    
+    func remove(client: BankClient) {
+        self.arrangedSubviews.forEach {
+            if $0.tag == client.waitingNumber {
+                self.removeArrangedSubview($0)
+                $0.removeFromSuperview()
+            }
+        }
     }
 }
