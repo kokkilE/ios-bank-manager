@@ -9,7 +9,7 @@ import Foundation
 
 final class Bank {
     private var clientQueue: Queue<BankClient> = .init()
-    private var numberOfClient: Int = 0
+    private var numberOfClient: Int = 1
     
     private let businessQueue: DispatchQueue = .init(label: "bankerDispatchQueue", attributes: .concurrent)
     private let depositSemaphore: DispatchSemaphore = .init(value: 2)
@@ -19,6 +19,17 @@ final class Bank {
         setupClient()
         let processTime = measureProcessTime(processBusiness)
         closeBank(processTime: processTime)
+    }
+    
+    func makeClient() -> BankClient? {
+        guard let businessType = BusinessType.allCases.randomElement() else { return nil }
+        
+        let client: BankClient = .init(waitingNumber: numberOfClient, businessType: businessType)
+        
+        clientQueue.enqueue(client)
+        numberOfClient += 1
+        
+        return client
     }
     
     private func setupClient() {
@@ -41,27 +52,25 @@ final class Bank {
         return processTime
     }
     
-    private func processBusiness() {
+    func processBusiness() {
         let businessDispatchGroup: DispatchGroup = .init()
                 
         while let client = clientQueue.dequeue() {
             dispatchClient(client, dispatchGroup: businessDispatchGroup)
-            numberOfClient += 1
         }
-        
-        businessDispatchGroup.wait()
+//        businessDispatchGroup.wait()
     }
     
-    private func dispatchClient(_ client: BankClient, dispatchGroup: DispatchGroup) {
+    func dispatchClient(_ client: BankClient, dispatchGroup: DispatchGroup) {
         switch client.businessType {
         case .deposit:
-            businessQueue.async(group: dispatchGroup) {
+            businessQueue.async(group: dispatchGroup, qos: .background) {
                 self.depositSemaphore.wait()
                 Banker.receive(client: client)
                 self.depositSemaphore.signal()
             }
         case .loan:
-            businessQueue.async(group: dispatchGroup) {
+            businessQueue.async(group: dispatchGroup, qos: .background) {
                 self.loanSemaphore.wait()
                 Banker.receive(client: client)
                 self.loanSemaphore.signal()
