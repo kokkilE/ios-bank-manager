@@ -34,6 +34,13 @@ class ViewController: UIViewController {
             object: nil
         )
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(endProcess(notification:)),
+            name: Notification.Name("2"),
+            object: nil
+        )
+        
         /* 발신지 코드
         NotificationCenter.default.post(
             name: Notification.Name("startBankBusiness"),
@@ -151,7 +158,19 @@ class ViewController: UIViewController {
     
     @objc func startProcess(notification: Notification) {
         guard let client = notification.object as? BankClient else { return }
-        waitingClientStackView.remove(client: client)
+        
+        DispatchQueue.main.async {
+            self.waitingClientStackView.remove(client: client)
+            self.processingClientStackView.add(client: client)
+        }
+    }
+    
+    @objc func endProcess(notification: Notification) {
+        guard let client = notification.object as? BankClient else { return }
+        
+        DispatchQueue.main.async {
+            self.processingClientStackView.remove(client: client)
+        }
     }
     
     @objc func touchUpAddClientButton() {
