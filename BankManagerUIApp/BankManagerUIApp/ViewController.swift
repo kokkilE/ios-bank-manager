@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     private var timer = Timer()
     private var startTime: CFAbsoluteTime = .zero
     
-    @objc func measerTime() {
+    @objc func measureTime() {
         let currentTime = CFAbsoluteTimeGetCurrent() - startTime
         
         let milliseconds = Int(currentTime * 1000) % 1000
@@ -37,21 +37,23 @@ class ViewController: UIViewController {
     }
     
     func setTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(measerTime), userInfo: nil, repeats: true)
+        if timer.isValid { return }
+        
+        timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(measureTime), userInfo: nil, repeats: true)
     }
     
     private func addNotificationObserver() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(startProcess(notification:)),
-            name: Notification.Name("1"),
+            name: Notification.Name("startBankBusiness"),
             object: nil
         )
         
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(endProcess(notification:)),
-            name: Notification.Name("2"),
+            name: Notification.Name("endBankBusiness"),
             object: nil
         )
     }
@@ -200,6 +202,7 @@ class ViewController: UIViewController {
         processingClientStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         totalTime.text = "00:00:000"
         timer.invalidate()
+        bank.resetOperationQueue()
         
         processingClientStackView.stopDrawingUI()
     }
