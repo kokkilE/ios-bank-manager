@@ -207,4 +207,3 @@ class ViewController: UIViewController {
         processingClientStackView.stopDrawingUI()
     }
 }
-

@@ -24,15 +24,13 @@ final class Bank {
         return queue
     }()
     
+    func open() {
+//        setupClient()
+    }
+    
     func resetOperationQueue() {
         depositQueue.cancelAllOperations()
         loanQueue.cancelAllOperations()
-    }
-    
-    func open() {
-        setupClient()
-        let processTime = measureProcessTime(processBusiness)
-        closeBank(processTime: processTime)
     }
     
     func makeClient() -> BankClient? {
@@ -46,35 +44,13 @@ final class Bank {
         return client
     }
     
-    private func setupClient() {
-        numberOfClient = 0
-        let numberOfWaitingClient = Int.random(in: 10...30)
-        
-        for number in 1...numberOfWaitingClient {
-            guard let businessType = BusinessType.allCases.randomElement() else { return }
-            let client: BankClient = .init(waitingNumber: number, businessType: businessType)
-            
-            clientQueue.enqueue(client)
-        }
-    }
-    
-    private func measureProcessTime(_ process: () -> ()) -> Double {
-        let startTime = CFAbsoluteTimeGetCurrent()
-        process()
-        let processTime = CFAbsoluteTimeGetCurrent() - startTime
-        
-        return processTime
-    }
-    
     func processBusiness() {
-        let businessDispatchGroup: DispatchGroup = .init()
-                
         while let client = clientQueue.dequeue() {
-            dispatchClient(client, dispatchGroup: businessDispatchGroup)
+            addClientToOperationQueue(client)
         }
     }
     
-    func dispatchClient(_ client: BankClient, dispatchGroup: DispatchGroup) {
+    func addClientToOperationQueue(_ client: BankClient) {
         switch client.businessType {
         case .deposit:
             depositQueue.addOperation {
@@ -90,11 +66,5 @@ final class Bank {
                 NotificationCenter.default.post(name: NSNotification.Name("endBankBusiness"), object: client)
             }
         }
-    }
-    
-    private func closeBank(processTime: Double) {
-        let totalWorkTime = String(format: "%0.2f", processTime)
-        
-        print("업무가 마감되었습니다. 오늘 업무를 처리한 고객은 총 \(numberOfClient)명이며, 총 업무시간은 \(totalWorkTime)초입니다.")
     }
 }
