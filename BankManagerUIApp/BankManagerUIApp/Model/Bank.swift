@@ -58,27 +58,31 @@ final class Bank {
         while let client = clientQueue.dequeue() {
             dispatchClient(client, dispatchGroup: businessDispatchGroup)
         }
-//        businessDispatchGroup.wait()
     }
     
     func dispatchClient(_ client: BankClient, dispatchGroup: DispatchGroup) {
         switch client.businessType {
         case .deposit:
-            businessQueue.async(group: dispatchGroup, qos: .background) {
+            let workItem: DispatchWorkItem = .init(qos: .background) {
                 self.depositSemaphore.wait()
                 NotificationCenter.default.post(name: NSNotification.Name("1"), object: client)
                 Banker.receive(client: client)
                 self.depositSemaphore.signal()
                 NotificationCenter.default.post(name: NSNotification.Name("2"), object: client)
             }
+            
+            businessQueue.async(group: dispatchGroup, execute: workItem)
+            
         case .loan:
-            businessQueue.async(group: dispatchGroup, qos: .background) {
+            let workItem: DispatchWorkItem = .init(qos: .background) {
                 self.loanSemaphore.wait()
                 NotificationCenter.default.post(name: NSNotification.Name("1"), object: client)
                 Banker.receive(client: client)
                 self.loanSemaphore.signal()
                 NotificationCenter.default.post(name: NSNotification.Name("2"), object: client)
             }
+            
+            businessQueue.async(group: dispatchGroup, execute: workItem)
         }
     }
     

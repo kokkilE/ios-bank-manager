@@ -21,9 +21,23 @@ class ViewController: UIViewController {
         addQueueLabel()
         addScrollView()
         addNotificationObserver()
-        // testing..
-//        waitingClientStackView.addClient()
-//        processingClientStackView.addClient()
+    }
+    
+    private var timer = Timer()
+    private var startTime: CFAbsoluteTime = .zero
+    
+    @objc func measerTime() {
+        let currentTime = CFAbsoluteTimeGetCurrent() - startTime
+        
+        let milliseconds = Int(currentTime * 1000) % 1000
+        let seconds = (Int(currentTime * 1000) / 1000) % 60
+        let minutes = (Int(currentTime * 1000) / (1000 * 60)) % 60
+        
+        totalTime.text = String(format: "%02d:%02d.%03d", minutes, seconds, milliseconds)
+    }
+    
+    func setTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(measerTime), userInfo: nil, repeats: true)
     }
     
     private func addNotificationObserver() {
@@ -40,12 +54,6 @@ class ViewController: UIViewController {
             name: Notification.Name("2"),
             object: nil
         )
-        
-        /* 발신지 코드
-        NotificationCenter.default.post(
-            name: Notification.Name("startBankBusiness"),
-            object: nil)
-         */
     }
     
     private func setupMainStackView() {
@@ -93,7 +101,7 @@ class ViewController: UIViewController {
         businessTime.textAlignment = .right
         businessTime.font = .systemFont(ofSize: 24)
         
-        totalTime.text = "01:01:001"
+        totalTime.text = "00:00:000"
         totalTime.textAlignment = .left
         totalTime.font = .systemFont(ofSize: 24)
         
@@ -174,6 +182,8 @@ class ViewController: UIViewController {
     }
     
     @objc func touchUpAddClientButton() {
+        processingClientStackView.startDrawingUI()
+        
         for _ in 1...10 {
             guard let client = bank.makeClient() else { return }
             
@@ -181,12 +191,17 @@ class ViewController: UIViewController {
         }
         
         bank.processBusiness()
+        setTimer()
+        startTime = CFAbsoluteTimeGetCurrent()
     }
     
     @objc func resetClientAndTime() {
         waitingClientStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         processingClientStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         totalTime.text = "00:00:000"
+        timer.invalidate()
+        
+        processingClientStackView.stopDrawingUI()
     }
 }
 

@@ -8,9 +8,19 @@
 import UIKit
 
 final class ClientStackView: UIStackView {
+    private var isStop: Bool = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
+    }
+    
+    func stopDrawingUI() {
+        isStop = true
+    }
+    
+    func startDrawingUI() {
+        isStop = false
     }
     
     required init(coder: NSCoder) {
@@ -35,6 +45,10 @@ final class ClientStackView: UIStackView {
     }
     
     func add(client: BankClient) {
+        if isStop {
+            return
+        }
+        
         let label: UILabel = .init()
         label.text = "\(client.waitingNumber)-\(client.businessType.rawValue)"
         label.tag = client.waitingNumber
